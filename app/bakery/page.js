@@ -34,15 +34,12 @@ export default function Bakery() {
     let purchaseQty = Number(item.purchaseQty);
     let usedQty = Number(item.usedQty);
 
-    // convert purchase
     if (item.unit === "kg") purchaseQty *= 1000;
     if (item.unit === "ltr") purchaseQty *= 1000;
 
-    // convert used
     if (item.usedUnit === "kg") usedQty *= 1000;
     if (item.usedUnit === "ltr") usedQty *= 1000;
 
-    // safe calculation
     if (purchaseQty > 0 && item.price > 0 && usedQty > 0) {
       item.cost = (item.price / purchaseQty) * usedQty;
     } else {
@@ -60,25 +57,26 @@ export default function Bakery() {
     Number(extra.misc || 0);
 
   return (
-    <div style={{ padding: 20, fontFamily: "Arial" }}>
+    <div style={{ padding: 15, fontFamily: "Arial", maxWidth: 500, margin: "auto" }}>
 
       {/* LOGO */}
       <div style={{ textAlign: "center", marginBottom: 10 }}>
-        <img src="/bakery-logo.png" style={{ height: 250 }} />
+        <img src="/bakery-logo.png" style={{ height: 120 }} />
       </div>
 
-      <h1 style={{ textAlign: "center" }}>🍰 Bakery Cost Calculator</h1>
+      <h1 style={{ textAlign: "center", fontSize: 22 }}>🍰 Bakery Cost Calculator</h1>
 
-      <div style={{ textAlign: "center", marginBottom: 20 }}>
+      <div style={{ marginBottom: 20 }}>
         <button
           onClick={addItem}
           style={{
-            padding: "10px 20px",
+            padding: "14px",
             background: "#8B4513",
             color: "#fff",
             border: "none",
-            borderRadius: 8,
-            cursor: "pointer",
+            borderRadius: 10,
+            width: "100%",
+            fontSize: 16,
           }}
         >
           + Add Ingredient
@@ -90,63 +88,70 @@ export default function Bakery() {
           key={i}
           style={{
             border: "1px solid #ddd",
-            borderRadius: 10,
-            padding: 15,
-            marginBottom: 10,
+            borderRadius: 12,
+            padding: 12,
+            marginBottom: 15,
             background: "#fff8f0",
           }}
         >
+          {/* Item Name */}
           <input
             placeholder="Item Name"
             onChange={(e) => updateItem(i, "name", e.target.value)}
-            style={{ marginRight: 5 }}
+            style={{ width: "100%", padding: 10, borderRadius: 8, marginBottom: 10 }}
           />
 
-          <input
-            placeholder="Purchase Qty"
-            type="number"
-            onChange={(e) => updateItem(i, "purchaseQty", e.target.value)}
-            style={{ marginRight: 5 }}
-          />
+          {/* Purchase */}
+          <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
+            <input
+              placeholder="Purchase Qty"
+              type="number"
+              onChange={(e) => updateItem(i, "purchaseQty", e.target.value)}
+              style={{ flex: 1, padding: 10, borderRadius: 8 }}
+            />
 
-          {/* PURCHASE UNIT */}
-          <select
-            onChange={(e) => updateItem(i, "unit", e.target.value)}
-            style={{ marginRight: 5 }}
-          >
-            <option value="gm">gm</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="ltr">ltr</option>
-            <option value="pcs">pcs</option>
-          </select>
+            <select
+              onChange={(e) => updateItem(i, "unit", e.target.value)}
+              style={{ flex: 1, padding: 10, borderRadius: 8 }}
+            >
+              <option value="gm">gm</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="ltr">ltr</option>
+              <option value="pcs">pcs</option>
+            </select>
+          </div>
 
+          {/* Price */}
           <input
             placeholder="Price ₹"
             type="number"
             onChange={(e) => updateItem(i, "price", e.target.value)}
-            style={{ marginRight: 5 }}
+            style={{ width: "100%", padding: 10, borderRadius: 8, marginBottom: 10 }}
           />
 
-          <input
-            placeholder="Used Qty"
-            type="number"
-            onChange={(e) => updateItem(i, "usedQty", e.target.value)}
-            style={{ marginRight: 5 }}
-          />
+          {/* Used */}
+          <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
+            <input
+              placeholder="Used Qty"
+              type="number"
+              onChange={(e) => updateItem(i, "usedQty", e.target.value)}
+              style={{ flex: 1, padding: 10, borderRadius: 8 }}
+            />
 
-          {/* USED UNIT */}
-          <select
-            onChange={(e) => updateItem(i, "usedUnit", e.target.value)}
-          >
-            <option value="gm">gm</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="ltr">ltr</option>
-            <option value="pcs">pcs</option>
-          </select>
+            <select
+              onChange={(e) => updateItem(i, "usedUnit", e.target.value)}
+              style={{ flex: 1, padding: 10, borderRadius: 8 }}
+            >
+              <option value="gm">gm</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="ltr">ltr</option>
+              <option value="pcs">pcs</option>
+            </select>
+          </div>
 
-          <p style={{ marginTop: 10 }}>
+          <p style={{ fontWeight: "bold" }}>
             Cost: ₹ {item.cost.toFixed(2)}
           </p>
         </div>
@@ -154,30 +159,12 @@ export default function Bakery() {
 
       <h3>Extra Costs</h3>
 
-      <input
-        placeholder="Electricity"
-        onChange={(e) =>
-          setExtra({ ...extra, electricity: e.target.value })
-        }
-      />
-      <input
-        placeholder="Gas"
-        onChange={(e) =>
-          setExtra({ ...extra, gas: e.target.value })
-        }
-      />
-      <input
-        placeholder="Labour"
-        onChange={(e) =>
-          setExtra({ ...extra, labour: e.target.value })
-        }
-      />
-      <input
-        placeholder="Misc"
-        onChange={(e) =>
-          setExtra({ ...extra, misc: e.target.value })
-        }
-      />
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <input placeholder="Electricity" onChange={(e) => setExtra({ ...extra, electricity: e.target.value })} />
+        <input placeholder="Gas" onChange={(e) => setExtra({ ...extra, gas: e.target.value })} />
+        <input placeholder="Labour" onChange={(e) => setExtra({ ...extra, labour: e.target.value })} />
+        <input placeholder="Misc" onChange={(e) => setExtra({ ...extra, misc: e.target.value })} />
+      </div>
 
       <h2 style={{ marginTop: 20 }}>
         Total Cost: ₹ {totalCost.toFixed(2)}
